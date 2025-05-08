@@ -3,9 +3,8 @@ pipeline {
 
     environment {
         DOCKER_HUB_USER = 'superlike1'
-        IMAGE_WEB = '${DOCKER_HUB_USER}/web-app'
-        IMAGE_REPORT = '${DOCKER_HUB_USER}/report-app'
-
+        IMAGE_WEB = "${DOCKER_HUB_USER}/web-app"
+        IMAGE_REPORT = "${DOCKER_HUB_USER}/report-app"
     }
 
     stages {
@@ -13,19 +12,18 @@ pipeline {
             steps {
                 script {
                     // build
-                    sh 'docker build -t $IMAGE_WEB:latest ./web'
-                    sh 'docker build -t $IMAGE_REPORT:latest ./report'
+                    sh "docker build -t ${IMAGE_WEB}:latest ./web"
+                    sh "docker build -t ${IMAGE_REPORT}:latest ./report"
 
                     // login no docker hub token
                     withCredentials([usernamePassword(credentialsId:'docker-hub-token', 
                     usernameVariable: 'DOCKER_USER', 
                     passwordVariable: 'DOCKER_PASS')]) {
-                        sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                        sh 'docker push $IMAGE_WEB:latest'
-                        sh 'docker push $IMAGE_REPORT:latest'
+                        sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
+                        sh "docker push ${IMAGE_WEB}:latest"
+                        sh "docker push ${IMAGE_REPORT}:latest"
                     }
                 }
-                    
             }
         }
         stage('Deploy com Docker Compose') {
