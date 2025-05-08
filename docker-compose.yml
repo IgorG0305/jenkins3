@@ -17,7 +17,7 @@ services:
   web:
     build:
       context: ./web
-    image: superlike1/web-app:1.0:latest
+    image: superlike1/web-app:1.0  # Ajuste aqui para uma tag válida
     container_name: web
     restart: always
     depends_on:
@@ -26,6 +26,7 @@ services:
       - "4000:4000"
     networks:
       - app-net
+
   report:
     build:
       context: ./report
